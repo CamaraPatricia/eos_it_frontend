@@ -1,0 +1,89 @@
+<div class="task-form-container">
+  <div class="task-form-card">
+    <div class="form-header">
+      <span class="form-icon">
+        {{ isEditMode ? '✎' : '+' }}
+      </span>
+
+      <div>
+        <h2>{{ isEditMode ? 'Edit task' : 'Create task' }}</h2>
+
+        <p>
+          {{
+            isEditMode
+              ? 'Update the details of your task.'
+              : 'Complete the form to add a new task.'
+          }}
+        </p>
+      </div>
+    </div>
+
+    <form #taskForm="ngForm" (ngSubmit)="saveTask()">
+      <div class="form-group">
+        <label for="taskName">Task name</label>
+
+        <input
+          type="text"
+          id="taskName"
+          name="taskName"
+          [(ngModel)]="newTask.taskName"
+          placeholder="Enter task name"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="dueDate">Due date</label>
+
+        <input
+          type="datetime-local"
+          id="dueDate"
+          name="dueDate"
+          [(ngModel)]="newTask.dueDate"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="userId">Assigned user</label>
+
+        <select
+          id="userId"
+          name="userId"
+          [(ngModel)]="newTask.userId"
+          required
+          title="Select a user for the task"
+        >
+          <option [ngValue]="0" disabled>
+            Select a user
+          </option>
+
+          <option
+            *ngFor="let user of users()"
+            [ngValue]="user.userId"
+          >
+            {{ user.username }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="secondary-button"
+          routerLink="/my-tasks"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="primary-button"
+          [disabled]="taskForm.invalid"
+        >
+          {{ isEditMode ? 'Save changes' : 'Create task' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

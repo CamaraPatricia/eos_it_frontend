@@ -1,0 +1,70 @@
+.search-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fffaf7;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #7d5a5a;
+}
+
+input,
+select {
+  padding: 0.85rem 1rem;
+  border: 2px solid #f3d6d8;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #d88ca1;
+  box-shadow: 0 0 0 4px rgba(216, 140, 161, 0.2);
+}
+
+button {
+  margin-top: 0.5rem;
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #d88ca1, #c96d88);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(201, 109, 136, 0.35);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.tasks-list {
+  width: 100%;
+  margin-top: 2rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 1.5rem;
+}

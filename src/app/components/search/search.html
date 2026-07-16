@@ -1,0 +1,47 @@
+<div class="search-container">
+
+  <div class="form-group">
+    <label for="userId">Search tasks for user</label>
+
+    <select
+      id="userId"
+      name="userId"
+      [(ngModel)]="selectedUserId">
+
+      <option [ngValue]="0">
+        Select a user
+      </option>
+
+      <option
+        *ngFor="let user of users()"
+        [ngValue]="user.userId">
+
+        {{ user.username }}
+
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="taskName">Task name</label>
+
+    <input
+      type="text"
+      id="taskName"
+      name="taskName"
+      [(ngModel)]="taskName"
+      placeholder="Enter task name" />
+  </div>
+
+  <button (click)="searchTasks()">
+    Search
+  </button>
+
+  <div class="tasks-list">
+    <app-task-card
+      *ngFor="let task of filteredTasks()"
+      [task]="task">
+    </app-task-card>
+  </div>
+
+</div>

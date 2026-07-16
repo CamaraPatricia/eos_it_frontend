@@ -1,0 +1,35 @@
+<section class="tasks-page">
+  <div class="tasks-container">
+    <div class="tasks-header">
+      <div>
+        <p class="tasks-subtitle">Task overview</p>
+
+        <h1>Here you can see your tasks</h1>
+
+        <p class="tasks-description">
+          Review, edit and organize all your assigned tasks.
+        </p>
+      </div>
+
+      <span class="tasks-count">
+        {{ tasks().length }}
+        {{ tasks().length === 1 ? 'task' : 'tasks' }}
+      </span>
+    </div>
+
+    <div class="tasks-list" *ngIf="tasks().length > 0; else noTasks">
+      <app-task-card
+        *ngFor="let task of tasks()"
+        [task]="task"
+        (deleted) = "loadTasks()">
+      </app-task-card>
+    </div>
+
+    <ng-template #noTasks>
+      <div class="empty-state">
+        <span>✓</span>
+        <h2>No tasks available</h2>
+      </div>
+    </ng-template>
+  </div>
+</section>

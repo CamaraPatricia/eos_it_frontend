@@ -1,0 +1,69 @@
+<article class="task-card">
+  <div class="task-card__header">
+    <div>
+      <p class="task-card__eyebrow">
+        Task #{{ task.id }}
+      </p>
+
+      <h2 class="task-card__title">
+        {{ task.taskName }}
+      </h2>
+    </div>
+
+    <span class="task-card__status">
+      {{ task.statusType || 'Not specified' }}
+    </span>
+  </div>
+
+  <div class="task-card__content">
+    <div class="task-card__detail">
+      <span class="task-card__detail-icon">◷</span>
+
+      <div>
+        <span class="task-card__label">Due date</span>
+
+        <p>
+          {{
+            task.dueDate
+              ? (task.dueDate | date: 'dd.MM.yyyy HH:mm')
+              : 'Not specified'
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="task-card__detail">
+      <span class="task-card__detail-icon">↻</span>
+
+      <div>
+        <span class="task-card__label">Last updated</span>
+
+        <p>
+          {{
+            task.lastUpdateDate
+              ? (task.lastUpdateDate | date: 'dd.MM.yyyy HH:mm')
+              : 'Not specified'
+          }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card__actions">
+    <button
+      type="button"
+      class="edit-button"
+      (click)="editTask()"
+    >
+      Edit
+    </button>
+
+    <button
+      type="button"
+      class="delete-button"
+      (click)="deleteTask()"
+    >
+      Delete
+    </button>
+  </div>
+</article>

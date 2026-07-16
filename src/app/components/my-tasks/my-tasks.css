@@ -1,0 +1,160 @@
+:host {
+  display: block;
+}
+
+.tasks-page {
+  min-height: calc(100vh - 70px);
+
+  padding: 55px 24px 70px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(231, 163, 190, 0.2),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(241, 206, 170, 0.3),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #fdf3f6, #fffaf3);
+}
+
+.tasks-container {
+  width: min(1180px, 100%);
+
+  margin: 0 auto;
+}
+
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 25px;
+
+  margin-bottom: 38px;
+  padding: 0 8px;
+}
+
+.tasks-subtitle {
+  margin: 0 0 8px;
+
+  color: #bd668d;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tasks-header h1 {
+  margin: 0 0 9px;
+
+  color: #73465a;
+
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.1;
+}
+
+.tasks-description {
+  margin: 0;
+
+  color: #947482;
+
+  font-size: 15px;
+}
+
+.tasks-count {
+  padding: 10px 16px;
+
+  border: 1px solid #e5becd;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  color: #a9587c;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  white-space: nowrap;
+
+  box-shadow: 0 7px 17px rgba(132, 79, 101, 0.09);
+}
+
+.tasks-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 300px));
+  justify-content: center;
+  gap: 30px;
+}
+
+.empty-state {
+  max-width: 500px;
+
+  margin: 80px auto 0;
+  padding: 48px 30px;
+
+  border: 1px dashed #dfb6c6;
+  border-radius: 25px;
+
+  background: rgba(255, 255, 255, 0.66);
+
+  text-align: center;
+
+  box-shadow: 0 15px 35px rgba(126, 79, 99, 0.08);
+}
+
+.empty-state span {
+  width: 64px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 19px;
+
+  border-radius: 20px;
+
+  background: #f6e2ea;
+
+  color: #bd668d;
+
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.empty-state h2 {
+  margin: 0 0 9px;
+
+  color: #75495c;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: #957783;
+}
+
+@media (max-width: 650px) {
+  .tasks-page {
+    padding: 38px 15px 55px;
+  }
+
+  .tasks-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tasks-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  app-task-card {
+    display: flex;
+    justify-content: center;
+  }
+}
