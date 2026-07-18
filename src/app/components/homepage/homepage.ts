@@ -1,5 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ServiceTasks } from '../../../services/service-tasks';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '../../models/User';
+import { UserService } from '../../../services/user-service';
 
 @Component({
   selector: 'app-homepage',
@@ -8,12 +10,9 @@ import { ServiceTasks } from '../../../services/service-tasks';
   styleUrl: './homepage.css',
 })
 export class Homepage implements OnInit {
-  tasks: any[] = [];
-  private taskService = inject(ServiceTasks);
+  user: User | null = null;
 
   ngOnInit(): void {
-    this.taskService.getTasks().subscribe(res => {
-      this.tasks = res;
-    });
+    this.user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null;
   }
 }

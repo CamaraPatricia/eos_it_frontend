@@ -1,24 +1,37 @@
 .navbar {
-  height: 70px;
+  display: flex;
+  flex-direction: column;
+
+  background: white;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+.navbar-top {
+  width: 100%;
+  min-height: 70px;
   padding: 0 40px;
+  box-sizing: border-box;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
-
-  position: relative;
+  color: #fceaf1;
+  background: #ce5581;
 }
 
 .logo {
   font-size: 24px;
   font-weight: 700;
-  color: #eeb4c8;
-  background: #ce5581;
-  z-index: 2;
+  color: #fceaf1;
+}
+
+.user-info {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fceaf1;
+  text-align: right;
+  font-style: italic;
 }
 
 .nav-links {
@@ -27,8 +40,6 @@
 
   position: absolute;
 
-  display: flex;
-  align-items: center;
   gap: 18px;
   
   font-style: italic;

@@ -1,0 +1,89 @@
+<div>
+  <div class="auth-tabs">
+    <button
+      type="button"
+      (click)="showLogin()"
+    >
+      Login
+    </button>
+
+    <button
+      type="button"
+      (click)="showRegister()"
+    >
+      Register
+    </button>
+  </div>
+
+  <form
+    #userForm="ngForm"
+    (ngSubmit)="saveUser()"
+  >
+    <div *ngIf="loggingIn">
+      <h2>Login</h2>
+
+      <input
+        type="email"
+        name="loginEmail"
+        placeholder="Email"
+        [(ngModel)]="email"
+        required
+      />
+
+      <input
+        type="password"
+        name="loginPassword"
+        placeholder="Password"
+        [(ngModel)]="password"
+        required
+      />
+    </div>
+
+    <div *ngIf="!loggingIn">
+      <h2>Register</h2>
+
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        [(ngModel)]="username"
+        required
+      />
+
+      <input
+        type="email"
+        name="registerEmail"
+        placeholder="Email"
+        [(ngModel)]="email"
+        required
+      />
+
+      <input
+        type="password"
+        name="registerPassword"
+        placeholder="Password"
+        [(ngModel)]="password"
+        required
+      />
+
+      <input
+        type="datetime-local"
+        name="birthDate"
+        [(ngModel)]="birthDate"
+        required
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="primary-button"
+      [disabled]="userForm.invalid"
+    >
+      {{ loggingIn ? 'Login' : 'Create account' }}
+    </button>
+
+    <p *ngIf="message">
+      {{ message }}
+    </p>
+  </form>
+</div>

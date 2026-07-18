@@ -1,6 +1,7 @@
 .search-container {
   max-width: 900px;
   margin: 2rem auto;
+  margin-top: 5rem;
   padding: 2rem;
   background: #fffaf7;
   border-radius: 18px;
@@ -67,4 +68,17 @@ button:active {
   justify-content: flex-start;
   align-items: stretch;
   gap: 1.5rem;
+}
+
+.status-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 20px;
+  margin-top: 10px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

@@ -1,6 +1,11 @@
 <nav>
+  <div class = "navbar-top">
   <div class="logo">
     TaskManager
+    </div>
+  <div class="user-info">
+      {{user ? "You're connected as " + user.username : "Please log in"}}
+    </div>
   </div>
 
   <div class = "nav-links">
@@ -8,6 +13,7 @@
     <a routerLink = "/my-tasks">My Tasks</a>
     <a routerLink = "/search">Search</a>
     <a routerLink = "/new-task">New Task</a>
+    <a routerLink = "/login">Login</a>
   </div>
 </nav>
 

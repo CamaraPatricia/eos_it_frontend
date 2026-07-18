@@ -16,11 +16,20 @@ export class ServiceTasks {
   }
 
   getTasksByUser(userId: number): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl}/by-user/${userId}`);
+    return this.http.get<Task[]>(`${this.apiUrl}/by-user`, {
+      params: {
+        userId: userId.toString()
+      }
+    });
   }
 
   getTaskById(taskId: number): Observable<Task> {
     return this.http.get<Task>(`${this.apiUrl}/${taskId}`);
+  }
+
+  getTasksByStatus(statusTypeId: string): Observable<Task[]> {
+    const params = new HttpParams().set('status', statusTypeId);
+    return this.http.get<Task[]>(`${this.apiUrl}/by-status`, { params });
   }
 
   createTask(request: CreateTask): Observable<Task> {

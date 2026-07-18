@@ -22,6 +22,43 @@
     </select>
   </div>
 
+  <div class="form-group"> 
+    <label>Task status</label> 
+    <div class="status-options"> 
+      <label class="checkbox-option"> 
+        <input type="checkbox" 
+        name="cancelled" 
+        [(ngModel)]="selectedStatusOptions.cancelled" 
+        /> Cancelled </label> 
+
+        <label class="checkbox-option"> 
+          <input type="checkbox" 
+          name="inProgress" 
+          [(ngModel)]="selectedStatusOptions.inProgress" 
+          /> In Progress </label> 
+
+          <label class="checkbox-option"> 
+            <input type="checkbox" 
+            name="notStarted" 
+            [(ngModel)]="selectedStatusOptions.notStarted" 
+            /> Not Started </label> 
+
+            <label class="checkbox-option"> 
+              <input type="checkbox" 
+              name="completed" 
+              [(ngModel)]="selectedStatusOptions.completed" 
+              /> Completed </label> 
+            </div> 
+          </div> 
+
+          <div class="form-group"> 
+            <label for="dueDate">Due date</label> 
+            <input type="date" 
+            id="dueDate" 
+            name="dueDate" 
+            [(ngModel)]="selectedDueDate" /> 
+          </div>
+
   <div class="form-group">
     <label for="taskName">Task name</label>
 
@@ -31,11 +68,23 @@
       name="taskName"
       [(ngModel)]="taskName"
       placeholder="Enter task name" />
+
   </div>
 
-  <button (click)="searchTasks()">
+  <div class="search-actions">
+  <button
+    type="button"
+    (click)="searchTasks()">
     Search
   </button>
+
+  <button
+    type="button"
+    class="clear-button"
+    (click)="clearFilters()">
+    Clear filters
+  </button>
+</div>
 
   <div class="tasks-list">
     <app-task-card
