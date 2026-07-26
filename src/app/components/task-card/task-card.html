@@ -1,36 +1,46 @@
-<article class="task-card">
+<article class="task-card"
+  [class.overdue]="isOverdue()">
+  
   <div class="task-card__header">
     <div>
       <p class="task-card__eyebrow">
-        Task #{{ task.id }}
+        Task #{{ task?.id }}
       </p>
 
       <h2 class="task-card__title">
-        {{ task.taskName }}
+        {{ task?.taskName }}
       </h2>
     </div>
 
-    <span class="task-card__status">
-      {{ task.statusType || 'Not specified' }}
+    <span 
+      class="task-card__status"
+      [style.color]="getStatusColor(task?.statusType ?? '')"
+      [style.border-color]="getStatusColor(task?.statusType ?? '')"
+      [style.background-color]="getStatusBackground(task?.statusType ?? '')"
+      (click)="changeStatusType()"
+    >
+      {{ task?.statusType || 'Not specified' }}
     </span>
-  </div>
+  </div> 
 
-  <div class="task-card__content">
-    <div class="task-card__detail">
+  <div class="task-card-date">
       <span class="task-card__detail-icon">◷</span>
 
       <div>
-        <span class="task-card__label">Due date</span>
+        <!-- <span class="task-card_date_label">Due date</span> -->
 
-        <p>
+        <strong>
           {{
-            task.dueDate
-              ? (task.dueDate | date: 'dd.MM.yyyy HH:mm')
+            task?.dueDate
+              ? (task?.dueDate | date: 'dd.MM.yyyy | HH:mm')
               : 'Not specified'
           }}
-        </p>
+        </strong>
       </div>
     </div>
+
+  <div class="task-card__content">
+    
 
     <div class="task-card__detail">
       <span class="task-card__detail-icon">↻</span>
@@ -40,8 +50,40 @@
 
         <p>
           {{
-            task.lastUpdateDate
-              ? (task.lastUpdateDate | date: 'dd.MM.yyyy HH:mm')
+            task?.lastUpdateDate
+              ? (task?.lastUpdateDate | date: 'dd.MM.yyyy HH:mm')
+              : 'Not specified'
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="task-card__detail">
+      <span class="task-card__detail-icon">✎</span>
+
+      <div>
+        <span class="task-card__label">Last updated by</span>
+
+        <p>
+          {{
+            task?.lastUpdatedBy
+              ? task?.lastUpdatedBy
+              : 'Not specified'
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="task-card__detail">
+      <span class="task-card__detail-icon">☆</span>
+
+      <div>
+        <span class="task-card__label">Created by</span>
+
+        <p>
+          {{
+            task?.createdBy
+              ? task?.createdBy
               : 'Not specified'
           }}
         </p>

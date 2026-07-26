@@ -1,1 +1,257 @@
+<div class="homepage-container">
+  <section class="dashboard">
+    <!-- USER INFORMATION -->
+    <article class="card user-card">
+      <div class="card-header">
+        <div>
+          <span class="section-label">My account</span>
+          <h2>Welcome, {{ user?.username }}! 👋</h2>
+        </div>
 
+        @if (user?.isInternal) {
+          <span class="badge internal">Internal user</span>
+        } @else {
+          <span class="badge external">External user</span>
+        }
+      </div>
+
+      <div class="user-details">
+        <div class="info-row">
+          <div class="info-label">
+            <span class="info-icon">✉</span>
+            <span>Email</span>
+          </div>
+
+          <strong>{{ user?.email }}</strong>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            <span class="info-icon">🎂</span>
+            <span>Birth Date</span>
+          </div>
+
+          <strong>
+            {{ user?.birthDate | date: 'dd MMMM yyyy' }}
+          </strong>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            <span class="info-icon">👤</span>
+            <span>Account Type</span>
+          </div>
+
+          <strong>
+            {{ user?.isInternal ? 'Internal' : 'External' }}
+          </strong>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            <span class="info-icon">📅</span>
+            <span>Member Since</span>
+          </div>
+
+          <strong>
+            {{ user?.creationDate | date: 'dd MMM yyyy' }}
+          </strong>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            <span class="info-icon">🕒</span>
+            <span>Last Update</span>
+          </div>
+
+          <strong>
+            {{ user?.lastUpdateDate | date: 'dd MMM yyyy, HH:mm' }}
+          </strong>
+        </div>
+      </div>
+    </article>
+
+    <!-- PERSONAL TASK STATISTICS -->
+    <article class="card statistics-card">
+      <div class="card-header">
+        <div>
+          <span class="section-label">Overview</span>
+          <h2>Task Statistics 📊</h2>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat total">
+          <span class="stat-title">Total Tasks</span>
+
+          <h3>{{ statistics().totalTasks }}</h3>
+
+          <p class="stat-description">
+            All assigned tasks
+          </p>
+        </div>
+
+        <div class="stat completed">
+          <span class="stat-title">Completed</span>
+
+          <h3>{{ statistics().completedTasks }}</h3>
+
+          <strong class="percentage">
+            {{ statistics().completedPercentage }}%
+          </strong>
+
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="statistics().completedPercentage"
+            ></div>
+          </div>
+        </div>
+
+        <div class="stat progress">
+          <span class="stat-title">In Progress</span>
+
+          <h3>{{ statistics().inProgressTasks }}</h3>
+
+          <strong class="percentage">
+            {{ statistics().inProgressPercentage }}%
+          </strong>
+
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="statistics().inProgressPercentage"
+            ></div>
+          </div>
+        </div>
+
+        <div class="stat not-started">
+          <span class="stat-title">Not Started</span>
+
+          <h3>{{ statistics().notStartedTasks }}</h3>
+
+          <strong class="percentage">
+            {{ statistics().notStartedPercentage }}%
+          </strong>
+
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="statistics().notStartedPercentage"
+            ></div>
+          </div>
+        </div>
+
+        <div class="stat cancelled">
+          <span class="stat-title">Cancelled</span>
+
+          <h3>{{ statistics().cancelledTasks }}</h3>
+
+          <strong class="percentage">
+            {{ statistics().cancelledPercentage }}%
+          </strong>
+
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="statistics().cancelledPercentage"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  @if (isInternalUser) {
+    <section class="users-section">
+      <button
+        type="button"
+        class="load-button"
+        (click)="toggleUsersStatistics()"
+      >
+        <span>
+          {{ showUsersStatistics() ? 'Hide User Statistics' : 'Show User Statistics' }}
+        </span>
+
+        <span
+          class="button-arrow"
+          [class.rotated]="showUsersStatistics()"
+        >
+          ↓
+        </span>
+      </button>
+
+      @if (showUsersStatistics()) {
+        <article class="card users-statistics-card">
+          <div class="card-header users-header">
+            <div>
+              <span class="section-label">Administration</span>
+              <h2>User Statistics 👥</h2>
+            </div>
+
+            <span class="users-count">
+              {{ usersStatistics().length }}
+              {{ usersStatistics().length === 1 ? 'user' : 'users' }}
+            </span>
+          </div>
+
+          @if (usersStatistics().length > 0) {
+            <div class="users-grid">
+              @for (stat of usersStatistics(); track stat.user.userId) {
+                <div class="user-statistics">
+                  <div class="user-statistics-header">
+                    <div class="user-avatar">
+                      {{ stat.user.username.charAt(0).toUpperCase() }}
+                    </div>
+
+                    <div>
+                      <h3>{{ stat.user.username }}</h3>
+                      <span>{{ stat.user.email }}</span>
+                    </div>
+                  </div>
+
+                  <div class="user-total">
+                    <span>Total Tasks</span>
+                    <strong>{{ stat.totalTasks }}</strong>
+                  </div>
+
+                  <div class="user-status-list">
+                    <div class="user-status completed-status">
+                      <span class="status-dot"></span>
+                      <span>Completed</span>
+                      <strong>{{ stat.completedTasks }}</strong>
+                    </div>
+
+                    <div class="user-status progress-status">
+                      <span class="status-dot"></span>
+                      <span>In Progress</span>
+                      <strong>{{ stat.inProgressTasks }}</strong>
+                    </div>
+
+                    <div class="user-status not-started-status">
+                      <span class="status-dot"></span>
+                      <span>Not Started</span>
+                      <strong>{{ stat.notStartedTasks }}</strong>
+                    </div>
+
+                    <div class="user-status cancelled-status">
+                      <span class="status-dot"></span>
+                      <span>Cancelled</span>
+                      <strong>{{ stat.cancelledTasks }}</strong>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="empty-state">
+              <span>📭</span>
+              <h3>No statistics available</h3>
+              <p>There are currently no user statistics to display.</p>
+            </div>
+          }
+        </article>
+      }
+    </section>
+  }
+</div>

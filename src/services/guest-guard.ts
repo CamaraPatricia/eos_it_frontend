@@ -1,21 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import {  Router } from '@angular/router';
-import { User } from '../app/models/User';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LoggedInGuard {
+export class GuestGuard {
   private readonly router: Router = inject(Router);
-  private readonly user: User | null = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null;
+  //private readonly token: string | null = localStorage.getItem('TASKS_TOKEN');
 
   canActivate(route: any, state: any): boolean {
     const token: string | null = localStorage.getItem('TASKS_TOKEN');
-    if(token) {     
-      return true;
-    } else {
-      this.router.navigate(['/login']);
+    if (token) {
+        this.router.navigate(['/homepage']);
       return false;
     }
+
+    return true;
   }
 }

@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Task } from '../app/models/task';
 import { CreateTask } from '../app/models/createTask';
+import updateTaskStatusAndUser from '../app/models/uptateTaskStatusAndUser';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +43,17 @@ export class ServiceTasks {
 
   updateTask(taskId: number, request: CreateTask): Observable<Task> {
   return this.http.put<Task>(`${this.apiUrl}/${taskId}`, request);
+}
+  
+updateTaskStatusAndUser(taskId: number, updateData: updateTaskStatusAndUser): void{
+  this.http.patch<void>(`${this.apiUrl}/${taskId}`, updateData).subscribe({
+    next: () => {
+      console.log('Task status and user updated successfully');
+    },
+    error: (error) => {
+      console.error('Error updating task status and user:', error);
+    }
+  });
 }
 }
 

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { User } from '../app/models/User';
 import { AuthResponse } from '../app/models/authResponse';
@@ -17,15 +17,20 @@ export class UserService {
     return this.http.get<User[]>(this.apiUrl);
   }
 
-  createUser(request: CreateUser): Observable<User> {
-    return this.http.post<User>(this.apiUrl, request);
-  }
+  // createUser(request: CreateUser): Observable<User> {
+  //   return this.http.post<User>(this.apiUrl, request);
+  // }
 
-  getAuthenticatedUser(request: AuthUserReq): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth`, request);
-  }
+  // getAuthenticatedUser(request: AuthUserReq): Observable<AuthResponse> {
+  //   return this.http.post<AuthResponse>(`${this.apiUrl}/auth`, request);
+  // }
 
-  getUser(userId: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${userId}`);
+  // getUser(userId: number): Observable<User> {
+  //   return this.http.get<User>(`${this.apiUrl}/${userId}`);
+  // }
+
+  getUserByEmail(email: string): Observable<User> {
+    const params = new HttpParams().set('email', email);
+    return this.http.get<User>(`${this.apiUrl}/by-email`, { params });
   }
 }

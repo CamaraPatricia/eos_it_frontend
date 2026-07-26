@@ -1,26 +1,12 @@
-
 :host {
   display: block;
   min-height: calc(100vh - 80px);
-
   padding: 50px 20px;
 
   background:
-    radial-gradient(
-      circle at top left,
-      rgba(238, 38, 194, 0.12),
-      transparent 35%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(255, 214, 230, 0.6),
-      transparent 40%
-    ),
-    linear-gradient(
-      145deg,
-      #fff9f5,
-      #fff1f7
-    );
+    radial-gradient(circle at top left, rgba(168, 95, 121, 0.08), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(199, 169, 125, 0.13), transparent 38%),
+    linear-gradient(145deg, #f7f4ef, #f1ede7);
 }
 
 :host > div {
@@ -28,74 +14,58 @@
   margin: 30px auto;
   padding: 34px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.97),
-      rgba(255, 247, 242, 0.97)
-    );
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #ded7cf;
+  border-radius: 20px;
 
-  border: 1px solid #efd4dd;
-  border-radius: 26px;
-
-  box-shadow:
-    0 18px 45px rgba(121, 74, 94, 0.14),
-    inset 0 1px 0 #ffffff;
+  box-shadow: 0 18px 42px rgba(48, 45, 44, 0.11);
 }
 
 .auth-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
 
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 30px;
-  padding: 6px;
+  padding: 5px;
 
-  background: #fff0f6;
-
-  border: 1px solid #f0d3df;
-  border-radius: 16px;
+  background: #eee8e2;
+  border: 1px solid #ded7cf;
+  border-radius: 13px;
 }
 
 .auth-tabs button {
-  padding: 12px 18px;
+  padding: 11px 18px;
 
-  font-size: 15px;
-  font-weight: 700;
-  color: #9b5f78;
-
+  color: #6f6965;
   background: transparent;
 
   border: none;
-  border-radius: 12px;
+  border-radius: 9px;
 
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
 
   transition:
-    background-color 0.25s ease,
-    color 0.25s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
     transform 0.2s ease,
-    box-shadow 0.25s ease;
+    box-shadow 0.2s ease;
 }
 
 .auth-tabs button:hover {
-  color: #d719a7;
-  background: rgba(255, 255, 255, 0.7);
-  transform: translateY(-1px);
+  color: #87485f;
+  background: rgba(255, 255, 255, 0.72);
 }
 
-.auth-tabs button:focus {
+.auth-tabs button:focus,
+.auth-tabs button.active {
   outline: none;
 
   color: #ffffff;
-  background: linear-gradient(
-    135deg,
-    #ee26c2,
-    #d81b8c
-  );
-
-  box-shadow:
-    0 8px 20px rgba(238, 38, 194, 0.24);
+  background: #a85f79;
+  box-shadow: 0 6px 14px rgba(135, 72, 95, 0.18);
 }
 
 form {
@@ -113,60 +83,50 @@ form > div {
 h2 {
   margin: 0 0 8px;
 
+  color: #383331;
   font-size: 29px;
   font-weight: 800;
   text-align: center;
-  color: #6f3f53;
-
   letter-spacing: -0.5px;
 }
 
 input {
   width: 100%;
   box-sizing: border-box;
-
   padding: 14px 16px;
 
-  font-size: 15px;
-  color: #573443;
+  color: #383331;
+  background: #fcfbf9;
 
-  background: rgba(255, 255, 255, 0.94);
-
-  border: 1px solid #e8c7d4;
-  border-radius: 14px;
-
+  border: 1px solid #d8d1ca;
+  border-radius: 11px;
   outline: none;
 
+  font-size: 15px;
+
   transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    background-color 0.25s ease,
-    transform 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 input::placeholder {
-  color: #b58a9c;
+  color: #9a938e;
 }
 
 input:hover {
-  border-color: #dd9fba;
+  border-color: #bfb5ad;
 }
 
 input:focus {
   background: #ffffff;
-  border-color: #ee26c2;
-
-  box-shadow:
-    0 0 0 4px rgba(238, 38, 194, 0.11);
-
-  transform: translateY(-1px);
+  border-color: #a85f79;
+  box-shadow: 0 0 0 4px rgba(168, 95, 121, 0.1);
 }
 
 input.ng-invalid.ng-touched {
-  border-color: #e05a76;
-
-  box-shadow:
-    0 0 0 4px rgba(224, 90, 118, 0.1);
+  border-color: #a95b62;
+  box-shadow: 0 0 0 4px rgba(169, 91, 98, 0.1);
 }
 
 .primary-button {
@@ -174,38 +134,28 @@ input.ng-invalid.ng-touched {
   margin-top: 5px;
   padding: 14px 20px;
 
-  font-size: 16px;
-  font-weight: 800;
   color: #ffffff;
-
-  background:
-    linear-gradient(
-      135deg,
-      #ee26c2,
-      #d81b8c
-    );
+  background: #a85f79;
 
   border: none;
-  border-radius: 14px;
+  border-radius: 11px;
 
-  box-shadow:
-    0 10px 24px rgba(238, 38, 194, 0.23);
-
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
+
+  box-shadow: 0 9px 20px rgba(135, 72, 95, 0.2);
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.25s ease,
-    filter 0.25s ease;
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .primary-button:hover:not(:disabled) {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 14px 28px rgba(238, 38, 194, 0.3);
-
-  filter: brightness(1.04);
+  background: #87485f;
+  box-shadow: 0 12px 24px rgba(135, 72, 95, 0.25);
 }
 
 .primary-button:active:not(:disabled) {
@@ -213,11 +163,9 @@ input.ng-invalid.ng-touched {
 }
 
 .primary-button:disabled {
-  color: #c29aab;
-  background: #f1dfe6;
-
+  color: #9c9692;
+  background: #e6e0da;
   box-shadow: none;
-
   cursor: not-allowed;
 }
 
@@ -225,15 +173,15 @@ p {
   margin: 2px 0 0;
   padding: 12px 14px;
 
+  color: #6c535c;
+  background: #f2e7eb;
+
+  border: 1px solid #e1ccd4;
+  border-radius: 10px;
+
   font-size: 14px;
   font-weight: 600;
   text-align: center;
-  color: #8a4562;
-
-  background: #fff0f6;
-
-  border: 1px solid #efcad9;
-  border-radius: 12px;
 }
 
 @media (max-width: 520px) {
@@ -244,8 +192,7 @@ p {
   :host > div {
     margin: 15px auto;
     padding: 24px 20px;
-
-    border-radius: 21px;
+    border-radius: 17px;
   }
 
   h2 {

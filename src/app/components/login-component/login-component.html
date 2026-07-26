@@ -19,7 +19,7 @@
     #userForm="ngForm"
     (ngSubmit)="saveUser()"
   >
-    <div *ngIf="loggingIn">
+    <div *ngIf="loggingIn()">
       <h2>Login</h2>
 
       <input
@@ -39,7 +39,7 @@
       />
     </div>
 
-    <div *ngIf="!loggingIn">
+    <div *ngIf="!loggingIn()">
       <h2>Register</h2>
 
       <input
@@ -67,7 +67,7 @@
       />
 
       <input
-        type="datetime-local"
+        type="date"
         name="birthDate"
         [(ngModel)]="birthDate"
         required
@@ -79,7 +79,7 @@
       class="primary-button"
       [disabled]="userForm.invalid"
     >
-      {{ loggingIn ? 'Login' : 'Create account' }}
+      {{ loggingIn() ? 'Login' : 'Create account' }}
     </button>
 
     <p *ngIf="message">

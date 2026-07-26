@@ -4,26 +4,16 @@
 
 .tasks-page {
   min-height: calc(100vh - 70px);
-
-  padding: 55px 24px 70px;
+  padding: 52px 24px 70px;
 
   background:
-    radial-gradient(
-      circle at top left,
-      rgba(231, 163, 190, 0.2),
-      transparent 31%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(241, 206, 170, 0.3),
-      transparent 35%
-    ),
-    linear-gradient(135deg, #fdf3f6, #fffaf3);
+    radial-gradient(circle at top left, rgba(168, 95, 121, 0.07), transparent 31%),
+    radial-gradient(circle at bottom right, rgba(184, 147, 94, 0.09), transparent 35%),
+    #f7f4ef;
 }
 
 .tasks-container {
   width: min(1180px, 100%);
-
   margin: 0 auto;
 }
 
@@ -33,18 +23,17 @@
   align-items: flex-end;
   gap: 25px;
 
-  margin-bottom: 38px;
+  margin-bottom: 34px;
   padding: 0 8px;
 }
 
 .tasks-subtitle {
   margin: 0 0 8px;
 
-  color: #bd668d;
+  color: #a85f79;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
-
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -52,64 +41,61 @@
 .tasks-header h1 {
   margin: 0 0 9px;
 
-  color: #73465a;
+  color: #383331;
 
   font-size: clamp(30px, 4vw, 44px);
   line-height: 1.1;
+  letter-spacing: -0.025em;
 }
 
 .tasks-description {
   margin: 0;
 
-  color: #947482;
-
+  color: #77716e;
   font-size: 15px;
 }
 
 .tasks-count {
-  padding: 10px 16px;
+  padding: 9px 15px;
 
-  border: 1px solid #e5becd;
+  color: #6c535c;
+  background: #ffffff;
+
+  border: 1px solid #ded7cf;
   border-radius: 999px;
 
-  background: rgba(255, 255, 255, 0.72);
-
-  color: #a9587c;
-
   font-size: 14px;
-  font-weight: 800;
-
+  font-weight: 750;
   white-space: nowrap;
 
-  box-shadow: 0 7px 17px rgba(132, 79, 101, 0.09);
+  box-shadow: 0 5px 14px rgba(48, 45, 44, 0.06);
 }
 
 .tasks-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 300px));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 320px));
   justify-content: center;
-  gap: 30px;
+  gap: 26px;
 }
 
 .empty-state {
   max-width: 500px;
-
   margin: 80px auto 0;
   padding: 48px 30px;
 
-  border: 1px dashed #dfb6c6;
-  border-radius: 25px;
+  color: #77716e;
+  background: rgba(255, 255, 255, 0.82);
 
-  background: rgba(255, 255, 255, 0.66);
+  border: 1px dashed #cfc5bc;
+  border-radius: 18px;
 
   text-align: center;
-
-  box-shadow: 0 15px 35px rgba(126, 79, 99, 0.08);
+  box-shadow: 0 12px 28px rgba(48, 45, 44, 0.07);
 }
 
 .empty-state span {
-  width: 64px;
-  height: 64px;
+  width: 62px;
+  height: 62px;
 
   display: flex;
   align-items: center;
@@ -117,26 +103,22 @@
 
   margin: 0 auto 19px;
 
-  border-radius: 20px;
+  color: #87485f;
+  background: #f2e7eb;
+  border-radius: 17px;
 
-  background: #f6e2ea;
-
-  color: #bd668d;
-
-  font-size: 30px;
+  font-size: 29px;
   font-weight: 800;
 }
 
 .empty-state h2 {
   margin: 0 0 9px;
-
-  color: #75495c;
+  color: #383331;
 }
 
 .empty-state p {
   margin: 0;
-
-  color: #957783;
+  color: #77716e;
 }
 
 @media (max-width: 650px) {
@@ -150,7 +132,7 @@
   }
 
   .tasks-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
   app-task-card {

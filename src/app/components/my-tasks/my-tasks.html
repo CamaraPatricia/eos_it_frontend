@@ -21,6 +21,7 @@
       <app-task-card
         *ngFor="let task of tasks()"
         [task]="task"
+        [canEditStatus] = "true"
         (deleted) = "loadTasks()">
       </app-task-card>
     </div>

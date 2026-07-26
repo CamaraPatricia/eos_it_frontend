@@ -1,5 +1,5 @@
 export interface CreateUser {
-    birthDate: Date;
+    birthDate: string;
     email: string;
     username: string;
     password: string;

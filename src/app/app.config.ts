@@ -2,15 +2,18 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { LoggedInGuard } from '../services/logged-in-guard';
+import { GuestGuard } from '../services/guest-guard';
+import { authenticationInterceptor } from './interceptor/authentication.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(),
-    LoggedInGuard
+    provideHttpClient(withInterceptors([authenticationInterceptor])),
+    LoggedInGuard,
+    GuestGuard
   ]
 };
 
