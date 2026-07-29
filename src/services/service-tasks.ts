@@ -28,10 +28,10 @@ export class ServiceTasks {
     return this.http.get<Task>(`${this.apiUrl}/${taskId}`);
   }
 
-  getTasksByStatus(statusTypeId: string): Observable<Task[]> {
-    const params = new HttpParams().set('status', statusTypeId);
-    return this.http.get<Task[]>(`${this.apiUrl}/by-status`, { params });
-  }
+  // getTasksByStatus(statusTypeId: string): Observable<Task[]> {
+  //   const params = new HttpParams().set('status', statusTypeId);
+  //   return this.http.get<Task[]>(`${this.apiUrl}/by-status`, { params });
+  // }
 
   createTask(request: CreateTask): Observable<Task> {
     return this.http.post<Task>(this.apiUrl, request);

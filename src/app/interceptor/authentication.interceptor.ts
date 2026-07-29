@@ -6,10 +6,10 @@ import { catchError, throwError } from "rxjs";
 
 export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
     const router = inject(Router);
-    
-    if(req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
-        return next(req);
-    } 
+
+    // if(req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
+    //     return next(req);
+    // } 
 
     const token: string | null = LocalStorageUtils.getItem(LocalStorageUtils.tokenKey);
     let processedRequest;
@@ -24,12 +24,35 @@ export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
     return next(processedRequest).pipe(
     catchError(error => {
 
-      if (error.status === 401 || error.status === 403) {
-        LocalStorageUtils.deleteItem(LocalStorageUtils.tokenKey);
-        LocalStorageUtils.deleteItem(LocalStorageUtils.userKey);
+      switch (error.status) {
+        case 401: {
+          if (error.status === 401) {
+            if(req.url.includes('/auth')) {
+              alert('Invalid credentials. Please check your email and password.');
+            } else {
+              LocalStorageUtils.deleteItem(LocalStorageUtils.tokenKey);
+              LocalStorageUtils.deleteItem(LocalStorageUtils.userKey);
 
-        router.navigate(['/login']);
-      }
+              router.navigate(['/login']);
+              alert('Your session has expired. Please log in again.');
+            
+            }
+          }
+          break;
+        }
+        case 404: {
+          alert('Haven\'t found any associated account for this email');
+          break;
+        }
+        case 409: {
+          alert('This email is already registered. Please use a different email or go to login.');
+          break;
+        }
+        case 403: {
+          alert('You do not have permission to access this resource.');
+          break;
+        }
+    }
 
       return throwError(() => error);
     })

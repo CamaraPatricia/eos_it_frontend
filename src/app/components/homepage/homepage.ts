@@ -7,6 +7,7 @@ import { Task } from '../../models/task';
 import {DatePipe, CommonModule} from '@angular/common';
 import { StatisticsService } from '../../../services/statistics-service';
 import { StatisticsForUsers } from '../../models/statisticsForUsers';
+import LocalStorageUtils from '../../utils/localStorageUtils';
 
 @Component({
   selector: 'app-homepage',
@@ -16,13 +17,11 @@ import { StatisticsForUsers } from '../../models/statisticsForUsers';
 })
 export class Homepage implements OnInit {
   private taskService = inject(ServiceTasks);
-  private statisticsService = inject(StatisticsService);
+  private userService = inject(UserService);
 
-  user: User | null = null;
+  user = signal<User | null>(null);
   tasks = signal<Task[]>([]);
-  isInternalUser: boolean = false;
-
-  protected usersStatistics = signal<StatisticsForUsers[]>([]);
+  isAdmin: boolean = false;
 
   statistics = signal( {
   totalTasks: 0,
@@ -41,15 +40,30 @@ export class Homepage implements OnInit {
   showUsersStatistics= signal<boolean>(false);
 
   ngOnInit(): void {
-    this.user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null;
-    this.isInternalUser = this.user?.isInternal ?? false;
+    let localStorageUser = LocalStorageUtils.getItem(LocalStorageUtils.userKey) ? 
+      JSON.parse(LocalStorageUtils.getItem(LocalStorageUtils.userKey)!) : null;
 
-      let userId = 0;
-      if(this.user){
-        userId = this.user?.userId;
+    let userId = localStorageUser ? localStorageUser.userId : 0;
+    this.userService.getUser(userId).subscribe({
+      next: (user: User) => {
+        this.user.set(user);
+        
+      },
+      error: (error) => {
+        console.error('Error fetching user:', error);
       }
+    });
 
-      this.taskService.getTasksByUser(userId).subscribe(res => {
+    // this.isAdmin = this.localStorageUser()?.role_name === 'ADMIN' ? true : false;
+
+    //   let userd = 0;
+    //   if(this.user){
+    //     userId = this.user?.userId;
+    //   }
+
+    console.log('User:', this.user());
+
+      this.taskService.getTasksByUser(userId || 0).subscribe(res => {
         this.tasks.set(res);
         this.updateStatistics();
         console.log('Tasks fetched:', res);
@@ -104,23 +118,4 @@ private calculatePercentage(value: number, total: number): number {
 
   return Math.round((value / total) * 100);
 }
-
-protected toggleUsersStatistics(): void {
-    this.showUsersStatistics.set(!this.showUsersStatistics());
-
-    if (
-       this.showUsersStatistics() &&
-      this.isInternalUser &&
-      this.usersStatistics().length === 0
-    ) {
-      this.loadUsersStatistics();
-    }
-  }
-
-loadUsersStatistics(): void {
-  if (this.isInternalUser && this.showUsersStatistics()) {
-    this.statisticsService.getStatistics().subscribe(res => {
-      this.usersStatistics.set(res);
-    });
-  }}
 }

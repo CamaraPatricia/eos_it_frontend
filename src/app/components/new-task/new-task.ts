@@ -8,6 +8,7 @@ import { User } from '../../models/User';
 import {CommonModule} from "@angular/common";
 import { RouterLink } from '@angular/router';
 import LocalStorageUtils from '../../utils/localStorageUtils';
+import { LocalStorageUser } from '../../models/localStorageUser';
 
 @Component({
   selector: 'app-new-task',
@@ -20,8 +21,7 @@ export class NewTask implements OnInit {
   private taskService = inject(ServiceTasks);
   private userService = inject(UserService);
 
-  protected user = signal<User | null>(null);
-  protected is_internal = signal<boolean>(false);
+  protected user = signal<LocalStorageUser | null>(null);
   
   private router = inject(Router);
   private route = inject(ActivatedRoute); 
@@ -38,7 +38,6 @@ export class NewTask implements OnInit {
 
   ngOnInit(): void {
     this.user.set(JSON.parse(LocalStorageUtils.getItem(LocalStorageUtils.userKey) || 'null'));
-    this.is_internal.set(this.user()?.isInternal || false);
 
     const idFromRoute = this.route.snapshot.paramMap.get('id');
 
@@ -56,7 +55,7 @@ export class NewTask implements OnInit {
     }
 
     // Fetch users only if the current user is internal
-    if (this.is_internal()) {
+    if (this.user()?.roleName === 'ADMIN') {
       this.fetchUsers();
     }
   }
@@ -87,7 +86,7 @@ export class NewTask implements OnInit {
         },
       });
     } else {
-      if(!this.is_internal()){
+      if(this.user()?.roleName !== 'ADMIN'){
         this.newTask().userId = this.user()?.userId || 0;
       }
       this.taskService.createTask(this.newTask()).subscribe({

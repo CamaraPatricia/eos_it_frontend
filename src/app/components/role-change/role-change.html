@@ -1,0 +1,77 @@
+<div class="modal-backdrop" (click)="closeModal()">
+  <div class="role-modal" (click)="$event.stopPropagation()">
+
+    <button
+      type="button"
+      class="modal-close"
+      aria-label="Close"
+      (click)="closeModal()"
+    >
+      ×
+    </button>
+
+    <div class="modal-header">
+      <span class="section-label">Administration</span>
+
+      @if (user) {
+        <p style="font-size: 16px;">
+          Choose a new role for
+          <strong>{{ user.username }}</strong>
+        </p>
+      }
+    </div>
+    <div class="selected-user-details" *ngIf="user">
+    <h3>Selected User Details</h3>
+    <p><strong>Username:</strong> {{ user? user.username : "N/A" }}</p>
+    <p><strong>Email:</strong> {{ user? user.email : "N/A" }}</p>
+    <p><strong>Creation date: </strong> {{ user? user.creationDate  : "N/A" }}</p>
+    <p><strong>Role:</strong> {{ user? user.roleName : "N/A" }}</p>
+</div>
+
+    <form (ngSubmit)="changeRole()">
+      <div class="roles-list">
+        <label
+          class="role-option"
+          *ngFor="let role of roles()"
+          [class.role-option-selected]="selectedRoleId() === role.roleId"
+        >
+          <input
+            type="radio"
+            name="role"
+            [value]="role.roleId"
+            [checked]="selectedRoleId() === role.roleId"
+            (change)="selectedRole(role.roleId)"
+          />
+
+          <div class="role-option-content">
+            <span class="role-name">{{ role.roleName }}</span>
+            <span class="role-description">
+              Select this role for the current user
+            </span>
+          </div>
+
+          <span class="custom-radio"></span>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="confirm-button"
+          [disabled]="selectedRoleId() === null"
+        >
+          Change Role
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

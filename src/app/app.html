@@ -4,8 +4,8 @@
     TaskManager
     </div>
   <div class="user-info">
-  @if (user()) {
-    You're connected as {{ user()?.username }}
+  @if (localStorageUser()) {
+    You're connected as {{ localStorageUser()?.username }} - {{localStorageUser()?.roleName}}
     <button class="logout-btn" (click)="logout()">Log out</button>
   } @else {
     Please log in
@@ -13,11 +13,14 @@
 </div>
   </div>
 
-  <div class = "nav-links">
+  <div class = "nav-links" *ngIf = "localStorageUser()">
     <a routerLink = "/homepage">Homepage</a>
     <a routerLink = "/my-tasks">My Tasks</a>
     <a routerLink = "/search">Search</a>
     <a routerLink = "/new-task">New Task</a>
+    @if (localStorageUser()?.roleName === 'ADMIN') {
+    <a routerLink = "/statistics">Statistics</a>
+    }
     <!-- <a routerLink = "/login">Login</a> -->
   </div>
 </nav>

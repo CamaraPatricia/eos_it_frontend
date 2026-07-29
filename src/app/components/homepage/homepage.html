@@ -5,10 +5,10 @@
       <div class="card-header">
         <div>
           <span class="section-label">My account</span>
-          <h2>Welcome, {{ user?.username }}! 👋</h2>
+          <h2>Welcome, {{ user()?.username }}! 👋</h2>
         </div>
 
-        @if (user?.isInternal) {
+        @if (user()?.isInternal) {
           <span class="badge internal">Internal user</span>
         } @else {
           <span class="badge external">External user</span>
@@ -22,7 +22,7 @@
             <span>Email</span>
           </div>
 
-          <strong>{{ user?.email }}</strong>
+          <strong>{{ user()?.email }}</strong>
         </div>
 
         <div class="info-row">
@@ -32,7 +32,7 @@
           </div>
 
           <strong>
-            {{ user?.birthDate | date: 'dd MMMM yyyy' }}
+            {{ user()?.birthDate | date: 'dd MMMM yyyy' }}
           </strong>
         </div>
 
@@ -43,7 +43,7 @@
           </div>
 
           <strong>
-            {{ user?.isInternal ? 'Internal' : 'External' }}
+            {{ user()?.isInternal ? 'Internal' : 'External' }}
           </strong>
         </div>
 
@@ -54,7 +54,7 @@
           </div>
 
           <strong>
-            {{ user?.creationDate | date: 'dd MMM yyyy' }}
+            {{ user()?.creationDate | date: 'dd MMM yyyy' }}
           </strong>
         </div>
 
@@ -65,7 +65,7 @@
           </div>
 
           <strong>
-            {{ user?.lastUpdateDate | date: 'dd MMM yyyy, HH:mm' }}
+            {{ user()?.lastUpdateDate | date: 'dd MMM yyyy, HH:mm' }}
           </strong>
         </div>
       </div>
@@ -162,96 +162,4 @@
     </article>
   </section>
 
-  @if (isInternalUser) {
-    <section class="users-section">
-      <button
-        type="button"
-        class="load-button"
-        (click)="toggleUsersStatistics()"
-      >
-        <span>
-          {{ showUsersStatistics() ? 'Hide User Statistics' : 'Show User Statistics' }}
-        </span>
-
-        <span
-          class="button-arrow"
-          [class.rotated]="showUsersStatistics()"
-        >
-          ↓
-        </span>
-      </button>
-
-      @if (showUsersStatistics()) {
-        <article class="card users-statistics-card">
-          <div class="card-header users-header">
-            <div>
-              <span class="section-label">Administration</span>
-              <h2>User Statistics 👥</h2>
-            </div>
-
-            <span class="users-count">
-              {{ usersStatistics().length }}
-              {{ usersStatistics().length === 1 ? 'user' : 'users' }}
-            </span>
-          </div>
-
-          @if (usersStatistics().length > 0) {
-            <div class="users-grid">
-              @for (stat of usersStatistics(); track stat.user.userId) {
-                <div class="user-statistics">
-                  <div class="user-statistics-header">
-                    <div class="user-avatar">
-                      {{ stat.user.username.charAt(0).toUpperCase() }}
-                    </div>
-
-                    <div>
-                      <h3>{{ stat.user.username }}</h3>
-                      <span>{{ stat.user.email }}</span>
-                    </div>
-                  </div>
-
-                  <div class="user-total">
-                    <span>Total Tasks</span>
-                    <strong>{{ stat.totalTasks }}</strong>
-                  </div>
-
-                  <div class="user-status-list">
-                    <div class="user-status completed-status">
-                      <span class="status-dot"></span>
-                      <span>Completed</span>
-                      <strong>{{ stat.completedTasks }}</strong>
-                    </div>
-
-                    <div class="user-status progress-status">
-                      <span class="status-dot"></span>
-                      <span>In Progress</span>
-                      <strong>{{ stat.inProgressTasks }}</strong>
-                    </div>
-
-                    <div class="user-status not-started-status">
-                      <span class="status-dot"></span>
-                      <span>Not Started</span>
-                      <strong>{{ stat.notStartedTasks }}</strong>
-                    </div>
-
-                    <div class="user-status cancelled-status">
-                      <span class="status-dot"></span>
-                      <span>Cancelled</span>
-                      <strong>{{ stat.cancelledTasks }}</strong>
-                    </div>
-                  </div>
-                </div>
-              }
-            </div>
-          } @else {
-            <div class="empty-state">
-              <span>📭</span>
-              <h3>No statistics available</h3>
-              <p>There are currently no user statistics to display.</p>
-            </div>
-          }
-        </article>
-      }
-    </section>
-  }
 </div>

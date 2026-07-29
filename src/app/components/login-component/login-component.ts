@@ -28,6 +28,7 @@ export class LoginComponent {
   message=  '';
   email = '';
   password = '';
+  confirmPassword = '';
   birthDate ='';
   username = '';
   
@@ -40,6 +41,7 @@ export class LoginComponent {
 
 
   login(): void {
+    
     const encodedUserDTO: AuthUserReq = {
       email: btoa(this.email),
       password: btoa(this.password)
@@ -76,6 +78,11 @@ export class LoginComponent {
   }
   
   register(): void {
+    if(this.password !== this.confirmPassword) {
+      alert('Passwords do not match. Please try again.');
+      return;
+    }
+
     const encodedUserDTO: CreateUser = {
       email: btoa(this.email),
       password: btoa(this.password),
@@ -92,10 +99,11 @@ export class LoginComponent {
           return;
         }
 
-      LocalStorageUtils.setItem(LocalStorageUtils.tokenKey, response.token);
-      this.appComponent.setUser(response.user);
+      // LocalStorageUtils.setItem(LocalStorageUtils.tokenKey, response.token);
+      // this.appComponent.setUser(response.user);
 
-        this.router.navigate(['/homepage']);
+        this.loggingIn.set(true);
+        this.password = '';
       },
       error: (error) => {
         console.error('Registration failed:', error);

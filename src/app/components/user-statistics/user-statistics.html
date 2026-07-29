@@ -1,0 +1,156 @@
+<section class="users-section">
+
+  <article class="card users-statistics-card">
+    <div class="card-header users-header">
+      <div>
+        <span class="section-label">Administration</span>
+        <h2>User Statistics 👥</h2>
+        <p class="card-text">You can view user statistics
+          {{localStorageUser()?.roleName === 'ADMIN' ? 'and change their roles.' : '.' }}</p>
+      </div>
+
+      <span class="users-count">
+        {{ usersStatistics().length }}
+        {{ usersStatistics().length === 1 ? 'user' : 'users' }}
+      </span>
+    </div>
+
+    @if (usersStatistics().length > 0) {
+    <div class="users-grid">
+      @for (stat of usersStatistics(); track stat.user.userId) {
+      <div class="user-statistics" (click)="userSelected(stat.user.userId)">
+        <div class="user-statistics-header">
+          <div class="user-avatar">
+            {{ stat.user.username.charAt(0).toUpperCase() }}
+          </div>
+
+          <div>
+            <h3>{{ stat.user.username }} - {{ stat.user.roleName }}</h3>
+            <span>{{ stat.user.email }}</span>
+          </div>
+        </div>
+
+        <div class="user-total">
+          <span>Total Tasks</span>
+          <strong>{{ stat.totalTasks }}</strong>
+        </div>
+
+        <div class="user-status-list">
+          <div class="user-status completed-status">
+            <span class="status-dot"></span>
+            <span>Completed</span>
+            <strong>{{ stat.completedTasks }}</strong>
+          </div>
+
+          <div class="user-status progress-status">
+            <span class="status-dot"></span>
+            <span>In Progress</span>
+            <strong>{{ stat.inProgressTasks }}</strong>
+          </div>
+
+          <div class="user-status not-started-status">
+            <span class="status-dot"></span>
+            <span>Not Started</span>
+            <strong>{{ stat.notStartedTasks }}</strong>
+          </div>
+
+          <div class="user-status cancelled-status">
+            <span class="status-dot"></span>
+            <span>Cancelled</span>
+            <strong>{{ stat.cancelledTasks }}</strong>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </article>
+
+  <!-- <div class="selected-user-details" *ngIf="selectedUser()">
+    <h3>Selected User Details</h3>
+    <p><strong>Username:</strong> {{ selectedUser()?.username }}</p>
+    <p><strong>Email:</strong> {{ selectedUser()?.email }}</p>
+    <p><strong>Creation date: </strong> {{ selectedUser()?.creationDate | date }}</p>
+    <p><strong>Role:</strong> {{ selectedUser()?.roleName }}</p>
+
+    @if (localStorageUser()?.roleName === 'ADMIN') {
+    <button type="button" (click)="onChangeRole()">
+      View Role
+    </button> -->
+
+    <app-role-change *ngIf="showChangeRole()" 
+    [user]="selectedUser()" 
+    (roleChanged)="onRoleChanged($event)"
+    (closed)="closeRoleChange()"></app-role-change>
+
+  <div class="roles-details">
+    <h3>See all available roles</h3>
+
+    <div class="roles-list">
+      @for (role of roles(); track role.roleId) {
+      <div class="role-item">
+        <h4>{{ role.roleName }}</h4>
+
+        @for (resourceEntry of role.roles_permissions | keyvalue; track resourceEntry.key) {
+        <div class="role-permissions">
+          <h5>Resource: {{ resourceEntry.key }}</h5>
+
+          <ul>
+  @for (action of resourceEntry.value; track action) {
+    <li class="permission-item">
+      {{ action }}
+
+      @if (localStorageUser()?.roleName === 'ADMIN') {
+        <span
+          class="permission-delete"
+          title="Delete permission"
+          (click)="deletePermission(role.roleId, resourceEntry.key, action, $event)"
+        >
+          ×
+        </span>
+      }
+    </li>
+  }
+</ul>
+
+          @if (this.localStorageUser()?.roleName === 'ADMIN') {
+          <label [for]="'action-' + role.roleId + '-' + resourceEntry.key">
+            Add more permissions?
+          </label>
+
+          <select [id]="'action-' + role.roleId + '-' + resourceEntry.key" [(ngModel)]="
+    selectedActions[getPermissionKey(role.roleId, resourceEntry.key)]
+  " [ngModelOptions]="{ standalone: true }">
+            <option value="" disabled>
+              Select permission
+            </option>
+
+            @for (
+            action of actions.filter(
+            action => !resourceEntry.value.includes(action)
+            );
+            track action
+            ) {
+            <option [value]="action">
+              {{ action }}
+            </option>
+            }
+          </select>
+
+          <button type="button" [disabled]="
+    !selectedActions[getPermissionKey(role.roleId, resourceEntry.key)]
+  " (click)="addPermission(
+    role.roleId,
+    resourceEntry.key,
+    selectedActions[getPermissionKey(role.roleId, resourceEntry.key)]
+  )">
+            Add permission
+          </button>
+        }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</section>

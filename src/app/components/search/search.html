@@ -1,6 +1,6 @@
 <div class="search-container">
 
-  <div class="form-group" *ngIf="isInternalUser()">
+  <div class="form-group" *ngIf="this.user()?.roleName === 'ADMIN'">
     <label for="userId">Search tasks for user</label>
 
     <select
@@ -21,7 +21,7 @@
       </option>
     </select>
   </div>
-  <div class="form-group" *ngIf="!isInternalUser()">
+  <div class="form-group" *ngIf="this.user()?.roleName !== 'ADMIN'">
     <label for="userId">Search only in my tasks</label>
   </div>
 

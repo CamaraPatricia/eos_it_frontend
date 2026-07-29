@@ -6,4 +6,5 @@ export interface User {
     isInternal: boolean;
     creationDate: Date;
     lastUpdateDate: Date;
+    roleName: string;
 }

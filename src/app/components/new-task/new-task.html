@@ -47,7 +47,7 @@
       <div class="form-group">
         <label for="userId">Assigned user</label>
 
-        <select *ngIf="is_internal()"
+        <select *ngIf="this.user()?.roleName === 'ADMIN'"
           id="userId"
           name="userId"
           [(ngModel)]="newTask().userId"
@@ -65,7 +65,7 @@
             {{ user.username }}
           </option>
         </select>
-        <p *ngIf="!is_internal()">
+        <p *ngIf="this.user()?.roleName !== 'ADMIN'">
           Task will be assigned to you ({{ user()?.username }}).
         </p>
       </div>

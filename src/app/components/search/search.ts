@@ -7,6 +7,7 @@ import {TaskCard} from '../task-card/task-card';
 import { CommonModule } from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import LocalStorageUtils from '../../utils/localStorageUtils';
+import { LocalStorageUser } from '../../models/localStorageUser';
 
 
 @Component({
@@ -20,8 +21,7 @@ export class Search {
   tasks = signal<Task[]>([]);
   filteredTasks = signal<Task[]>([]);
   users = signal<User[]>([]);
-  user = signal<User | null>(null);
-  isInternalUser = signal<boolean>(false);
+  user = signal<LocalStorageUser | null>(null);
 
   private taskService = inject(ServiceTasks);
   private userService = inject(UserService);
@@ -40,13 +40,11 @@ export class Search {
 
   ngOnInit(): void {
     this.user.set(JSON.parse(LocalStorageUtils.getItem(LocalStorageUtils.userKey) || 'null'));
-    this.isInternalUser.set(this.user()?.isInternal || false);
-
     this.getTasks();
   }
 
   getTasks(): void {
-      if(this.isInternalUser()) {
+      if(this.user()?.roleName === 'ADMIN') {
       this.taskService.getTasks().subscribe(res => {
       this.tasks.set(res);
       this.filteredTasks.set(res);
@@ -69,7 +67,7 @@ export class Search {
   searchTasks(): void {
     const selectedStatuses = this.getSelectedStatuses();
 
-    if (this.isInternalUser() && this.selectedUserId !== 0) {
+    if (this.user()?.roleName === 'ADMIN' && this.selectedUserId !== 0) {
       this.taskService
         .getTasksByUser(this.selectedUserId)
         .subscribe(res => {
@@ -78,7 +76,7 @@ export class Search {
       
       return;
     }
-    this.getTasks();
+    
       this.filteredTasks.set(
       this.filterTasks(this.tasks(), selectedStatuses)
     );
@@ -151,5 +149,4 @@ const matchesDueDate =
 
     this.filteredTasks.set(this.tasks());
   }
-
 }

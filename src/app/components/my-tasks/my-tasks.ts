@@ -6,6 +6,7 @@ import { TaskCard } from '../task-card/task-card';
 import { Task } from '../../models/task';
 import { User } from '../../models/User';
 import LocalStorageUtils from '../../utils/localStorageUtils';
+import { LocalStorageUser } from '../../models/localStorageUser';
 
 /**
  * MyTasks --> afiseaza task-urile utilizatorului curent, ordonate crescator dupa data de scadenta.
@@ -21,7 +22,7 @@ import LocalStorageUtils from '../../utils/localStorageUtils';
 export class MyTasks implements OnInit {
   tasks = signal<Task[]>([]);
   private taskService = inject(ServiceTasks);
-  protected user = signal<User | null>(null);
+  protected user = signal<LocalStorageUser | null>(null);
 
   ngOnInit(): void {
     console.log('MyTasks component initialized');
