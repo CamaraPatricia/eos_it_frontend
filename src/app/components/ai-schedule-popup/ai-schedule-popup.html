@@ -1,0 +1,140 @@
+<div
+  class="schedule-backdrop"
+  role="presentation"
+  (click)="close()"
+>
+  <section
+    class="schedule-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="schedule-title"
+    (click)="$event.stopPropagation()"
+  >
+    <header class="schedule-header">
+      <div>
+        <span class="schedule-label">AI planner</span>
+
+        <h2 id="schedule-title">
+          Programul task-urilor ✨
+        </h2>
+
+        @if (rangeLabel) {
+          <p class="schedule-range">
+            {{ rangeLabel }}
+          </p>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="close-button"
+        aria-label="Închide programul"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+
+    @if (schedule.length > 0) {
+      <div class="schedule-summary">
+        <span>
+          {{ schedule.length }}
+          {{ schedule.length === 1 ? 'task' : 'task-uri' }}
+        </span>
+
+        <span>
+          Durată totală:
+          {{ durationLabel(totalDuration) }}
+        </span>
+      </div>
+
+      <div class="calendar-container">
+        <div class="calendar-grid">
+          @for (day of calendarDays; track day.key) {
+            <article class="calendar-day">
+              <header class="calendar-day-header">
+                <span class="week-day">
+                  {{ day.weekDay }}
+                </span>
+
+                <strong>
+                  {{ day.dateLabel }}
+                </strong>
+              </header>
+
+              <div class="calendar-day-body">
+                @if (day.tasks.length > 0) {
+                  @for (task of day.tasks; track task.taskId) {
+                    <div
+                      class="scheduled-task"
+                      [class.scheduled-task-overdue]="task.overdue"
+                    >
+                      <div class="task-order">
+                        {{ task.order }}
+                      </div>
+
+                      <div class="task-content">
+                        <h3>
+                          {{ task.taskName }}
+                        </h3>
+
+                        <div class="task-time">
+                          <span>
+                            {{ formatTime(task.startDate) }}
+                          </span>
+
+                          <span class="time-arrow">→</span>
+
+                          <span>
+                            {{ formatTime(task.endDate) }}
+                          </span>
+                        </div>
+
+                        <div class="task-footer">
+                          <span>
+                            {{ durationLabel(task.durationMinutes) }}
+                          </span>
+
+                          @if (task.overdue) {
+                            <span class="overdue-label">
+                              Depășește termenul
+                            </span>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  }
+                } @else {
+                  <div class="empty-day">
+                    <span>🌿</span>
+                    <p>Fără task-uri</p>
+                  </div>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="empty-schedule">
+        <span>📭</span>
+
+        <h3>Nu există task-uri de programat</h3>
+
+        <p>
+          Task-urile finalizate sau anulate nu sunt incluse.
+        </p>
+      </div>
+    }
+
+    <footer class="schedule-actions">
+      <button
+        type="button"
+        class="close-schedule-button"
+        (click)="close()"
+      >
+        Închide
+      </button>
+    </footer>
+  </section>
+</div>
