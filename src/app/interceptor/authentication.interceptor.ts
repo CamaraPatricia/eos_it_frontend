@@ -33,8 +33,10 @@ export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
               LocalStorageUtils.deleteItem(LocalStorageUtils.tokenKey);
               LocalStorageUtils.deleteItem(LocalStorageUtils.userKey);
 
-              router.navigate(['/login']);
               alert('Your session has expired. Please log in again.');
+              void router.navigateByUrl('/login', {
+      replaceUrl: true,
+    });
             
             }
           }

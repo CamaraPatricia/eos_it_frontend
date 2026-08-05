@@ -87,14 +87,44 @@
     (click)="clearFilters()">
     Clear filters
   </button>
+
+  <div class="tasks-filter">
+        <label class = "filter-label" for="filter">Order your tasks to find them easier</label>
+        <select id="filter" 
+        [(ngModel)]="selectedFilter" 
+        (change)="sortTasks()">
+          <option 
+          *ngFor="let option of taskSortingOptions" 
+          [value]="option.value">{{ option.label }}</option>
+        </select>
+      </div>
 </div>
 
   <div class="tasks-list">
+    @if(this.user()?.roleName === 'ADMIN'){
     <app-task-card
-      *ngFor="let task of filteredTasks()"
+      *ngFor="let task of hidratedTasks()"
       [task]="task"
       (deleted) = "searchTasks()">
     </app-task-card>
+  } @else {
+    <app-task-card
+      *ngFor="let task of visibleTasks()"
+      [task]="task"
+      (deleted) = "searchTasks()">
+    </app-task-card>
+  }
+  
+
+    @if(filteredTasks().length > 4){
+    <button
+      type="button"
+      class="see-more-tasks-button"
+      (click)="seeMoreTasks()"
+    >
+      {{ seeMore ? 'See more tasks' : 'See fewer tasks' }}
+    </button>
+  }
   </div>
 
 </div>

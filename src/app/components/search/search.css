@@ -151,3 +151,8 @@ button:active {
     margin-left: 0;
   }
 }
+
+.filter-label{
+  padding-right: 10px;
+
+}

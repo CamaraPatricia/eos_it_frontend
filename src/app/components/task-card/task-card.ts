@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import StatusType from '../../models/status-type';
 import { StatusTypesService } from '../../../services/status-types-service';
 import {CommonModule} from "@angular/common";
+import HydratedTask from '../search/search';
 
 const statusTypes = ["Cancelled",
 "In Progress",
@@ -27,7 +28,7 @@ const colors = ["#FF0000",
 })
 
 export class TaskCard{ 
-  @Input() task: Task | null = null;
+  @Input() task!: Task | HydratedTask; 
   @Input() canEditStatus: boolean | null = false;
   @Output() deleted = new EventEmitter<void>();
 
@@ -39,6 +40,10 @@ export class TaskCard{
   private currentStatustype = signal<string | null>(null);
   private statusTypes = signal<StatusType[]>([]);
   overdue: boolean = false;
+
+    protected isHydratedTask(task: Task | HydratedTask): task is HydratedTask {
+  return 'username' in task;
+}
 
   ngOnInit(): void {
     this.currentStatustype.set(this.task?.statusType || null);

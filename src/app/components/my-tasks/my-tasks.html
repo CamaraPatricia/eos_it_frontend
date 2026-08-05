@@ -11,15 +11,26 @@
         </p>
       </div>
 
+      <div class="tasks-filter">
+        <label for="filter">Order your tasks to find them easier</label>
+        <select id="filter" 
+        [(ngModel)]="selectedFilter" 
+        (change)="sortTasks()">
+          <option 
+          *ngFor="let option of taskSortingOptions" 
+          [value]="option.value">{{ option.label }}</option>
+        </select>
+      </div>
+      
       <span class="tasks-count">
         {{ tasks().length }}
         {{ tasks().length === 1 ? 'task' : 'tasks' }}
       </span>
     </div>
 
-    <div class="tasks-list" *ngIf="tasks().length > 0; else noTasks">
+    <div class="tasks-list" *ngIf="finalTasks().length > 0; else noTasks">
       <app-task-card
-        *ngFor="let task of tasks()"
+        *ngFor="let task of finalTasks()"
         [task]="task"
         [canEditStatus] = "true"
         (deleted) = "loadTasks()">
@@ -33,15 +44,24 @@
       </div>
     </ng-template>
   </div>
+
+  <button
+      type="button"
+      class="see-more-tasks-button"
+      (click)="seeMoreTasks()"
+    >
+      {{ seeMore ? 'See more tasks' : 'See fewer tasks' }}
+    </button>
 </section>
 
 <div class="my-tasks-header">
   <div>
-    <span class="section-label">Planning</span>
-    <h2>My Tasks 📋</h2>
-  </div>
+  <span class="section-label">Planning</span>
+  <h2>AI Schedule</h2>
+  <p>Generate an optimized order for completing your tasks.</p>
+</div>
 
-  <button
+  <button 
     type="button"
     class="generate-schedule-button"
     [disabled]="scheduleLoading()"

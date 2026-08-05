@@ -62,11 +62,6 @@ export class AiSchedulePopup implements OnInit, OnChanges, OnDestroy {
     this.closed.emit();
   }
 
-  @HostListener('document:keydown.escape')
-  protected closeWithEscape(): void {
-    this.close();
-  }
-
   protected formatTime(dateString: string): string {
     return new Intl.DateTimeFormat('ro-RO', {
       hour: '2-digit',

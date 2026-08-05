@@ -142,12 +142,22 @@
 }
 
 .my-tasks-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  width: min(1180px, 100%);
+  margin: 55px auto 22px;
 
-  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+
+  padding: 18px 24px;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  border: 1px solid #e8ddd6;
+  border-radius: 18px;
+
+  box-shadow: 0 10px 24px rgba(48, 45, 44, 0.06);
 }
 
 .generate-schedule-button {
@@ -236,4 +246,144 @@
   .generate-schedule-button {
     width: 100%;
   }
+}
+
+.see-more-tasks-button {
+  min-width: 190px;
+
+  /* make the button a flex container and center it horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* center the button in its container */
+  margin: 0 auto;
+  gap: 19px;
+  margin-top: 30px;
+
+  padding: 11px 18px;
+
+  border: 1px solid #ce5a84;
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d95f8c,
+      #bd4774
+    );
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 20px rgba(196, 72, 119, 0.25);
+
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    opacity 150ms ease;
+}
+
+.see-more-tasks-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow: 0 11px 24px rgba(196, 72, 119, 0.34);
+}
+
+.see-more-tasks-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.section-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #a85f79;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.my-tasks-header h2 {
+  margin: 0;
+
+  color: #383331;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.my-tasks-header p {
+  margin: 4px 0 0;
+
+  color: #77716e;
+  font-size: 14px;
+}
+
+.tasks-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 250px;
+}
+
+.tasks-filter label {
+  color: #6c535c;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tasks-filter select {
+  padding: 11px 42px 11px 14px;
+
+  border: 1px solid #d9cfc8;
+  border-radius: 13px;
+
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #e9d8df, #f5eee5) border-box;
+
+  color: #4d4343;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  outline: none;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  box-shadow: 0 6px 14px rgba(48, 45, 44, 0.06);
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, #a85f79 50%),
+    linear-gradient(135deg, #a85f79 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(50% - 2px),
+    calc(100% - 14px) calc(50% - 2px);
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+.tasks-filter select:hover {
+  border-color: #ce5a84;
+}
+
+.tasks-filter select:focus {
+  border-color: #ce5a84;
+  box-shadow: 0 0 0 4px rgba(206, 90, 132, 0.15);
 }

@@ -32,6 +32,7 @@ export class NewTask implements OnInit {
 
   newTask = signal<CreateTask>({
     taskName: '',
+    description: '',
     userId: 0,
     dueDate: new Date(),
   });
@@ -49,6 +50,7 @@ export class NewTask implements OnInit {
     } else {
       this.newTask.set({
         taskName: '',
+        description: '',
         userId: this.user()?.userId || 0,
         dueDate: new Date(),
       });
@@ -65,6 +67,7 @@ export class NewTask implements OnInit {
       next: task => {
         this.newTask.set({
           taskName: task.taskName,
+          description: task.description,
           userId: task.userId,
           dueDate: task.dueDate,
         });
