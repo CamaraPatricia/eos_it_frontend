@@ -22,7 +22,6 @@ export default interface HydratedTask extends Task {
 })
 export class Search {
   tasks = signal<Task[]>([]);
-  filteredTasks = signal<Task[]>([]);
   users = signal<User[]>([]);
   user = signal<LocalStorageUser | null>(null);
 
@@ -36,23 +35,23 @@ export class Search {
     notStarted: false,
     completed: false
   };
-  selectedStatuses: string[] = [];
-
   selectedUserId: number = 0;
   selectedDueDate: string = '';
 
-  protected visibleTasksCount = 4;
-  protected visibleTasks = signal<Task[]>([]);
-  protected seeMore: boolean = true;
+  //Pagination
+  protected currentPage = signal<number>(0);
+  protected readonly pageSize = 6;
+  protected totalPages = signal<number>(0);
+  protected totalTasks: number = 0;
 
-  protected sortedTasks = signal<Task[]>([]);
+  // sortare
   protected readonly taskSortingOptions = [
     { label: 'All', value: '' },
-    { label: 'Statuses', value: 'Statuses' },
-    { label: 'Task id', value: 'TaskId' },
-    { label: 'Due Date', value: 'DueDate' },
-    { label: 'Task Name', value: 'TaskName' },
-    { label: 'User Name', value: 'UserName' }
+    { label: 'Statuses', value: 'statusType' },
+    { label: 'Task id', value: 'taskId' },
+    { label: 'Due Date', value: 'dueDate' },
+    { label: 'Task Name', value: 'name' },
+    { label: 'Users', value: 'user.userId' }
   ];
   protected selectedFilter: string = '';
 
@@ -60,50 +59,65 @@ export class Search {
 
   ngOnInit(): void {
     this.user.set(JSON.parse(LocalStorageUtils.getItem(LocalStorageUtils.userKey) || 'null'));
-    this.getTasks();
-  }
-
-  getTasks(): void {
     if (this.user()?.roleName === 'ADMIN') {
-      this.taskService.getTasks().subscribe(res => {
-        this.tasks.set(res);
-        this.filteredTasks.set(res);
-        this.setVisibleTasks(res);
-      });
-      this.userService.getUsers().subscribe(res => {
-        this.users.set(res);
-      });
-    } else {
-      const userId = this.user()?.userId;
-      if (userId !== undefined) {
-        this.taskService.getTasksByUser(userId).subscribe(res => {
-          this.tasks.set(res);
-          this.filteredTasks.set(res);
-          this.setVisibleTasks(res);
-        });
-      }
-      this.users.set([]);
+      this.loadUsers();
     }
+
+    this.searchTasks();
   }
 
-  searchTasks(): void {
-    const selectedStatuses = this.getSelectedStatuses();
+  private loadUsers(): void {
+    this.userService.getUsers().subscribe({
+      next: (users) => {
+        this.users.set(users);
+        this.hydrateTasks();
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+      }
+    });
+  }
 
-    if (this.user()?.roleName === 'ADMIN' && this.selectedUserId !== 0) {
-      this.taskService
-        .getTasksByUser(this.selectedUserId)
-        .subscribe(res => {
-          this.filteredTasks.set(this.filterTasks(res, selectedStatuses));
-          this.setVisibleTasks(this.filteredTasks());
-        });
+  protected searchTasks(): void {
+    this.currentPage.set(0);
+    this.loadFilteredTasks();
+  }
 
+  private loadFilteredTasks(): void {
+
+    const currentUserId = this.user()?.userId;
+
+    if (currentUserId === undefined) {
       return;
     }
 
-    this.filteredTasks.set(
-      this.filterTasks(this.tasks(), selectedStatuses)
-    );
-    this.setVisibleTasks(this.filteredTasks());
+    const statusType = this.getSelectedStatuses();
+
+    const userId = this.user()?.roleName === 'ADMIN' ? this.selectedUserId : currentUserId;
+
+    this.taskService.getFilteredTasks(
+      this.taskName.trim(),
+      statusType,
+      userId,
+      this.selectedDueDate,
+      this.currentPage(),
+      this.pageSize,
+      this.selectedFilter
+    ).subscribe({
+      next: (response) => {
+        this.tasks.set(response.content);
+        this.totalPages.set(response.totalPages);
+        this.totalTasks = response.totalElements;
+
+        if (this.user()?.roleName === 'ADMIN') {
+          this.hydrateTasks();
+        }
+      },
+
+      error: (error) => {
+        console.error('Error loading filtered tasks:', error);
+      }
+    });
   }
 
   private getSelectedStatuses(): string[] {
@@ -128,37 +142,6 @@ export class Search {
     return statuses;
   }
 
-  private filterTasks(tasks: Task[], selectedStatuses: string[]): Task[] {
-    const searchedName = this.taskName.trim().toLowerCase();
-
-    return tasks.filter(task => {
-      const matchesTaskName =
-        searchedName.length === 0 ||
-        task.taskName.toLowerCase().includes(searchedName);
-
-      const matchesStatus =
-        selectedStatuses.length === 0 ||
-        selectedStatuses.some(status =>
-          task.statusType.toLowerCase() === status.toLowerCase()
-        );
-
-      const taskDueDate = new Date(task.dueDate)
-        .toISOString()
-        .split('T')[0];
-      console.log('Task Due Date:', taskDueDate);
-      console.log('Selected Due Date:', this.selectedDueDate);
-
-      const matchesDueDate =
-        !this.selectedDueDate ||
-        taskDueDate <= this.selectedDueDate;
-      return (
-        matchesTaskName &&
-        matchesStatus &&
-        matchesDueDate
-      );
-    });
-  }
-
   clearFilters(): void {
     this.selectedUserId = 0;
     this.taskName = '';
@@ -171,66 +154,33 @@ export class Search {
       completed: false
     };
 
-    this.filteredTasks.set(this.tasks());
-    this.setVisibleTasks(this.filteredTasks());
-  }
+    this.selectedFilter = '';
+    this.currentPage.set(0);
 
-  protected seeMoreTasks(): void {
-    if (this.seeMore) {
-      this.visibleTasksCount += 4;
-      this.setVisibleTasks((this.sortedTasks().length != 0) ? this.sortedTasks() : this.filteredTasks());
-    } else {
-      this.visibleTasksCount = 4;
-      this.setVisibleTasks((this.sortedTasks().length != 0) ? this.sortedTasks() : this.filteredTasks());
-    }
-
-    this.seeMore = true;
-    if (this.filteredTasks().length == this.visibleTasks().length) {
-      this.seeMore = false;
-    }
-    this.sortTasks();
+    this.loadFilteredTasks();
   }
 
   protected sortTasks(): void {
-    switch (this.selectedFilter) {
-      case 'Statuses':
-        this.sortedTasks.set([...this.filteredTasks()].sort((task1, task2) => {
-          return task1.statusType.localeCompare(task2.statusType);
-        }));
-        break;
-      case 'TaskId':
-        this.sortedTasks.set([...this.filteredTasks()].sort((task1, task2) => {
-          return task1.id - task2.id;
-        }));
-        break;
-      case 'DueDate':
-        this.sortedTasks.set([...this.filteredTasks()].sort((task1, task2) => {
-          return new Date(task1.dueDate).getTime() - new Date(task2.dueDate).getTime();
-        }));
-        break;
-      case 'TaskName':
-        this.sortedTasks.set([...this.filteredTasks()].sort((task1, task2) => {
-          return task1.taskName.localeCompare(task2.taskName);
-        }));
-        break;
-      case 'UserName':
-        this.sortedTasks.set([...this.filteredTasks()].sort((task1, task2) => {
-          return task1.userId - task2.userId;
-        }));
-        break;
-      default:
-        this.sortedTasks.set([...this.filteredTasks()]);
+    this.currentPage.set(0);
+    this.loadFilteredTasks();
+  }
+
+  protected nextPage(): void {
+    if (this.currentPage() < this.totalPages() - 1) {
+      this.currentPage.update(page => page + 1);
+      this.loadFilteredTasks();
     }
-    this.setVisibleTasks(this.sortedTasks());
   }
 
-  protected setVisibleTasks(tasksForVisible: Task[]): void {
-    this.visibleTasks.set(tasksForVisible.slice(0, this.visibleTasksCount));
-    this.hydrateTasks();
+  protected previousPage(): void {
+    if (this.currentPage() > 0) {
+      this.currentPage.update(page => page - 1);
+      this.loadFilteredTasks();
+    }
   }
 
-  protected hydrateTasks(): void{
-    this.hidratedTasks.set(this.visibleTasks().map(task => {
+  protected hydrateTasks(): void {
+    this.hidratedTasks.set(this.tasks().map(task => {
       const user = this.users().find(u => u.userId === task.userId);
       return {
         ...task,

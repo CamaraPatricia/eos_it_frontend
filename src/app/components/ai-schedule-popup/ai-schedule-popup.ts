@@ -1,14 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScheduleCalendarItem } from '../../models/scheduleCalendarItem';
 
@@ -181,9 +171,9 @@ export class AiSchedulePopup implements OnInit, OnChanges, OnDestroy {
   }
 
   protected get totalDuration(): number {
-  return this.schedule.reduce(
-    (total, task) => total + task.durationMinutes,
-    0
-  );
-}
+    return this.schedule.reduce(
+      (total, task) => total + task.durationMinutes,
+      0
+    );
+  }
 }

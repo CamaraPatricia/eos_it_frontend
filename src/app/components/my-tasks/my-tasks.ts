@@ -35,26 +35,26 @@ export class MyTasks implements OnInit {
 
   protected scheduleItems = signal<ScheduleCalendarItem[]>([]);
   protected items = input<ScheduleCalendarItem[]>(this.scheduleItems());
+
   protected scheduleOpen = signal(false);
   protected scheduleLoading = signal(false);
   protected scheduleError = signal<string | null>(null);
 
-  protected visibleTasksCount = 6;
-  protected visibleTasks = signal<Task[]>([]);
-  protected seeMore : boolean = true;
+  //Pagination
+  protected currentPage = signal<number>(0);
+  protected readonly pageSize = 6;
+  protected totalPages = signal<number>(0);
+  protected totalTasks: number = 0;
 
-  protected sortedTasks = signal<Task[]>([]);
+  // sortare
   protected readonly taskSortingOptions = [
   { label: 'All', value: '' },
-  { label: 'Statuses', value: 'Statuses' },
-  { label: 'Task id', value: 'TaskId' },
-  { label: 'Due Date', value: 'DueDate' },
-  {label: 'Task Name', value: 'TaskName' }
+  { label: 'Statuses', value: 'statusType' },
+  { label: 'Task id', value: 'taskId' },
+  { label: 'Due Date', value: 'dueDate' },
+  {label: 'Task Name', value: 'name' }
 ];
   protected selectedFilter: string = '';
-
-  
-  protected finalTasks = signal<Task[]>([]);
   
   ngOnInit(): void {
     console.log('MyTasks component initialized');
@@ -63,17 +63,33 @@ export class MyTasks implements OnInit {
   }
 
   loadTasks(): void {
-    console.log('Loading tasks for current user...');
+    const userId = this.user()?.userId;
 
-    this.taskService.getTasksByUser(this.user()?.userId || 0).subscribe(res => {
-      this.tasks.set([...res].sort(
-        (task1, task2) =>
-          new Date(task1.dueDate).getTime() -
-          new Date(task2.dueDate).getTime()
-      ));
-      this.visibleTasks.set(this.tasks().slice(0, this.visibleTasksCount));
-      this.setFinalTasks();
-    });
+    if (!userId) {
+      return;
+    }
+
+    console.log(
+      `Loading page ${this.currentPage()} with sort ${this.selectedFilter}`
+    );
+
+    this.taskService
+      .getPaginatedTasks(
+        userId,
+        this.currentPage(),
+        this.pageSize,
+        this.selectedFilter
+      )
+      .subscribe({
+        next: (response) => {
+          this.tasks.set(response.content);
+          this.totalPages.set(response.totalPages);
+          this.totalTasks = response.totalElements;
+        },
+        error: (error) => {
+          console.error('Error loading tasks:', error);
+        }
+      });
   }
 
   // AI Schedule
@@ -127,56 +143,24 @@ export class MyTasks implements OnInit {
     this.scheduleOpen.set(false);
   }
 
-  protected seeMoreTasks(): void {
-    if (this.seeMore) {
-    this.visibleTasksCount += 6;
-    this.visibleTasks.set(this.tasks().slice(0, this.visibleTasksCount));
-    } else {
-      this.visibleTasksCount - 6 < 6 ? this.visibleTasksCount = 6 : this.visibleTasksCount -= 6;
-      this.visibleTasks.set(this.tasks().slice(0, this.visibleTasksCount));
-    }
-
-    this.seeMore = true;
-    if( this.tasks().length == this.visibleTasks().length) {
-      this.seeMore = false;
-    }
-    this.sortTasks();
-    this.setFinalTasks();
-  }
-
   protected sortTasks(): void {
-    switch (this.selectedFilter) {
-      case 'Statuses':
-        this.sortedTasks.set([...this.visibleTasks()].sort((task1, task2) => {
-          return task1.statusType.localeCompare(task2.statusType);
-        }));
-        break;
-      case 'TaskId':
-        this.sortedTasks.set([...this.visibleTasks()].sort((task1, task2) => {
-          return task1.id - task2.id;
-        }));
-        break;
-      case 'DueDate':
-        this.sortedTasks.set([...this.visibleTasks()].sort((task1, task2) => {
-          return new Date(task1.dueDate).getTime() - new Date(task2.dueDate).getTime();
-        }));
-        break;
-      case 'TaskName':
-        this.sortedTasks.set([...this.visibleTasks()].sort((task1, task2) => {
-          return task1.taskName.localeCompare(task2.taskName);
-        }));
-        break;
-      default:
-        this.sortedTasks.set([...this.visibleTasks()]);
-    }
-    this.setFinalTasks();
+    this.currentPage.set(0);
+    this.loadTasks();
   }
 
-  protected setFinalTasks(): void {
-    if (this.sortedTasks().length > 0) {
-      this.finalTasks.set([...this.sortedTasks()]);
-    } else {
-      this.finalTasks.set([...this.visibleTasks()]);
+
+  protected nextPage(): void {
+    if (this.currentPage() < this.totalPages() - 1) {
+      this.currentPage.update(page => page + 1);
+      this.loadTasks();
+    }
+  }
+
+
+  protected previousPage(): void {
+    if (this.currentPage() > 0) {
+      this.currentPage.update(page => page - 1);
+      this.loadTasks();
     }
   }
 }

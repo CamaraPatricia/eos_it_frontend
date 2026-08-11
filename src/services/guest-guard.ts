@@ -6,15 +6,13 @@ import {  Router } from '@angular/router';
 })
 export class GuestGuard {
   private readonly router: Router = inject(Router);
-  //private readonly token: string | null = localStorage.getItem('TASKS_TOKEN');
 
-  canActivate(route: any, state: any): boolean {
+  canActivate(_route: any, _state: any): boolean {
     const token: string | null = localStorage.getItem('TASKS_TOKEN');
     if (token) {
         this.router.navigate(['/homepage']);
       return false;
     }
-
     return true;
   }
 }

@@ -23,14 +23,14 @@
       </div>
       
       <span class="tasks-count">
-        {{ tasks().length }}
-        {{ tasks().length === 1 ? 'task' : 'tasks' }}
+        {{ totalTasks }}
+        {{ totalTasks === 1 ? 'task' : 'tasks' }}
       </span>
     </div>
 
-    <div class="tasks-list" *ngIf="finalTasks().length > 0; else noTasks">
+    <div class="tasks-list" *ngIf="tasks().length > 0; else noTasks">
       <app-task-card
-        *ngFor="let task of finalTasks()"
+        *ngFor="let task of tasks()"
         [task]="task"
         [canEditStatus] = "true"
         (deleted) = "loadTasks()">
@@ -45,13 +45,29 @@
     </ng-template>
   </div>
 
+  <div class="pagination">
   <button
-      type="button"
-      class="see-more-tasks-button"
-      (click)="seeMoreTasks()"
-    >
-      {{ seeMore ? 'See more tasks' : 'See fewer tasks' }}
-    </button>
+    type="button"
+    class="pagination-button"
+    (click)="previousPage()"
+    [disabled]="currentPage() === 0"
+    aria-label="Previous page">
+    ‹
+  </button>
+
+  <span class="pagination-info">
+    Page {{ currentPage() + 1 }} of {{ totalPages() }}
+  </span>
+
+  <button
+    type="button"
+    class="pagination-button"
+    (click)="nextPage()"
+    [disabled]="currentPage() >= totalPages() - 1"
+    aria-label="Next page">
+    ›
+  </button>
+</div>
 </section>
 
 <div class="my-tasks-header">

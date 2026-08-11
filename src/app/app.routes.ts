@@ -10,6 +10,7 @@ import { UserStatistics } from './components/user-statistics/user-statistics';
 import { AdminGuard } from '../services/admin-guard-guard';
 
 export const routes: Routes = [
+    {path: '', redirectTo: 'login', pathMatch: 'full'},
     {path: 'homepage', component: Homepage, canActivate: [LoggedInGuard]},
     {path: 'my-tasks', component: MyTasks, canActivate: [LoggedInGuard]},
     {path: 'search', component: Search, canActivate: [LoggedInGuard]},

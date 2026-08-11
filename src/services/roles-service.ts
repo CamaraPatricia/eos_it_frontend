@@ -15,16 +15,6 @@ export class RolesService {
     return this.httpClient.get<RoleDTO[]>(this.baseUrl);
   }
 
-   createRole(roleName: string): Observable<RoleDTO> {
-    return this.httpClient.post<RoleDTO>(
-      `${this.baseUrl}?roleName=${encodeURIComponent(roleName)}`,
-      {}
-    );
-  }
-
-  deleteRole(roleId: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.baseUrl}/${roleId}`);
-  }
 
   addPermission(roleId:number, resource: PermissionReq) {
     return this.httpClient.post<RoleDTO>(`${this.baseUrl}/${roleId}`, resource);

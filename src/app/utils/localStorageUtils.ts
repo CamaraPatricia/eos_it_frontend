@@ -1,4 +1,3 @@
-import { User } from "../models/User";
 
 export default class LocalStorageUtils {
     static readonly tokenKey: string = "TASKS_TOKEN";

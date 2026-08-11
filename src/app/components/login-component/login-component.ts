@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { UserService } from '../../../services/user-service';
+// import { UserService } from '../../../services/user-service';
 import { AuthResponse } from '../../models/authResponse';
 import { User } from '../../models/User';
 import { AuthUserReq } from '../../models/authUserReq';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { App } from '../../app';
 import { LoginService } from '../../../services/login-service';
 import LocalStorageUtils from '../../utils/localStorageUtils';
-import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs';
 import { CreateUser } from '../../models/createUser';
 
 
@@ -33,15 +33,13 @@ export class LoginComponent {
   username = '';
   
   authResponse: AuthResponse = {} as AuthResponse;
-
-  private userService = inject(UserService);  
+ 
   private router = inject(Router);
   private appComponent = inject(App);
   private loginService = inject(LoginService); 
 
 
   login(): void {
-    
     const encodedUserDTO: AuthUserReq = {
       email: btoa(this.email),
       password: btoa(this.password)
@@ -49,12 +47,12 @@ export class LoginComponent {
 
     this.loginService.postLogin(encodedUserDTO).subscribe({
       next: (response : AuthResponse) => {
-        console.log('Login successful:', response);
-
         if (response.token.startsWith('401')) {
           console.error('Login failed: Invalid credentials');
           return;
         }
+
+        console.log('Login successful:', response);
 
         LocalStorageUtils.setItem(LocalStorageUtils.tokenKey, response.token);
         this.appComponent.setUser(response.user);
@@ -92,15 +90,11 @@ export class LoginComponent {
 
     this.loginService.register(encodedUserDTO).subscribe({
       next: (response : AuthResponse) => {
-        console.log('Registration successful:', response);
-
         if (response.token.startsWith('400')) {
           console.error('Registration failed: Invalid credentials');
           return;
         }
-
-      // LocalStorageUtils.setItem(LocalStorageUtils.tokenKey, response.token);
-      // this.appComponent.setUser(response.user);
+        console.log('Registration successful:', response);
 
         this.loggingIn.set(true);
         this.password = '';

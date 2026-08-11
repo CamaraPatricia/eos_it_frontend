@@ -21,8 +21,6 @@ export class App {
   private router = inject(Router);
   private userService = inject(UserService);
 
-  //protected role = signal<string | null>(null);
-
   setUser(user: User | null): void {
     this.localStorageUser.set({
       userId: user?.userId || 0,
@@ -30,11 +28,9 @@ export class App {
       roleName: this.getRoleFromToken(LocalStorageUtils.getItem(LocalStorageUtils.tokenKey) || '') || '',
     });
     LocalStorageUtils.setItem(LocalStorageUtils.userKey, JSON.stringify(this.localStorageUser()));
-    //this.role.set(this.getRoleFromToken(LocalStorageUtils.getItem(LocalStorageUtils.tokenKey) || ''));
   }
 
   logout(): void {
-    //this.setUser(null);
     LocalStorageUtils.deleteItem(LocalStorageUtils.tokenKey);
     LocalStorageUtils.deleteItem(LocalStorageUtils.userKey);
     this.localStorageUser.set(null);

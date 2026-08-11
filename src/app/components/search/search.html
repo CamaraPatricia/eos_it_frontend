@@ -109,21 +109,37 @@
     </app-task-card>
   } @else {
     <app-task-card
-      *ngFor="let task of visibleTasks()"
+      *ngFor="let task of tasks()"
       [task]="task"
       (deleted) = "searchTasks()">
     </app-task-card>
   }
   
 
-    @if(filteredTasks().length > 4){
-    <button
-      type="button"
-      class="see-more-tasks-button"
-      (click)="seeMoreTasks()"
-    >
-      {{ seeMore ? 'See more tasks' : 'See fewer tasks' }}
-    </button>
+    @if(totalPages() > 1){
+    <div class="pagination">
+  <button
+    type="button"
+    class="pagination-button"
+    (click)="previousPage()"
+    [disabled]="currentPage() === 0"
+    aria-label="Previous page">
+    ‹
+  </button>
+
+  <span class="pagination-info">
+    Page {{ currentPage() + 1 }} of {{ totalPages() }}
+  </span>
+
+  <button
+    type="button"
+    class="pagination-button"
+    (click)="nextPage()"
+    [disabled]="currentPage() >= totalPages() - 1"
+    aria-label="Next page">
+    ›
+  </button>
+</div>
   }
   </div>
 

@@ -1,10 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { User } from '../app/models/User';
-import { AuthResponse } from '../app/models/authResponse';
 import { Observable } from 'rxjs/internal/Observable';
-import { CreateUser } from '../app/models/createUser';
-import { AuthUserReq } from '../app/models/authUserReq';
 
 @Injectable({
   providedIn: 'root',
@@ -17,14 +14,6 @@ export class UserService {
     return this.http.get<User[]>(this.apiUrl);
   }
 
-  // createUser(request: CreateUser): Observable<User> {
-  //   return this.http.post<User>(this.apiUrl, request);
-  // }
-
-  // getAuthenticatedUser(request: AuthUserReq): Observable<AuthResponse> {
-  //   return this.http.post<AuthResponse>(`${this.apiUrl}/auth`, request);
-  // }
-
   getUser(userId: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${userId}`);
   }
@@ -35,7 +24,7 @@ export class UserService {
   }
 
   updateUserRole(userId: number, roleId: number): Observable<User> {
-    const body = { roleId };
+//    const body = { roleId };
     return this.http.put<User>(`${this.apiUrl}/${userId}`, 
       null,
       {params: {roleId: roleId.toString()}})

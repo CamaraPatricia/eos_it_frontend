@@ -5,29 +5,26 @@ import { inject } from "@angular/core";
 import { catchError, throwError } from "rxjs";
 
 export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
-    const router = inject(Router);
+  const router = inject(Router);
 
-    // if(req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
-    //     return next(req);
-    // } 
+  const token: string | null = LocalStorageUtils.getItem(LocalStorageUtils.tokenKey);
+  let processedRequest;
 
-    const token: string | null = LocalStorageUtils.getItem(LocalStorageUtils.tokenKey);
-    let processedRequest;
-    if(token) {
-        processedRequest = req.clone({
-            headers: req.headers.set('Authorization', `Bearer ${token}`)
-        });
-    } else {
-        processedRequest = req;
-    }
+  if (token) {
+    processedRequest = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${token}`)
+    });
+  } else {
+    processedRequest = req;
+  }
 
-    return next(processedRequest).pipe(
+  return next(processedRequest).pipe(
     catchError(error => {
 
       switch (error.status) {
         case 401: {
           if (error.status === 401) {
-            if(req.url.includes('/auth')) {
+            if (req.url.includes('/auth')) {
               alert('Invalid credentials. Please check your email and password.');
             } else {
               LocalStorageUtils.deleteItem(LocalStorageUtils.tokenKey);
@@ -35,9 +32,9 @@ export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
 
               alert('Your session has expired. Please log in again.');
               void router.navigateByUrl('/login', {
-      replaceUrl: true,
-    });
-            
+                replaceUrl: true,
+              });
+
             }
           }
           break;
@@ -54,7 +51,7 @@ export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
           alert('You do not have permission to access this resource.');
           break;
         }
-    }
+      }
 
       return throwError(() => error);
     })
